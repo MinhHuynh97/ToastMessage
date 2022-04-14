@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div id="toast">
+        
+    </div>
+    <div class="">
+        <div class="btn btn--success">Show success</div>
+        <div class="btn btn--danger">Show danger</div>
+
+    </div>
+    <script>
+        const idToast=document.querySelector('#toast');
+        const icon={
+            success:'success',
+            info:'info',
+            warn:'exclamation',
+            error:'exclamation'
+        }
+        const btnSuccess=document.querySelector('.btn--success');
+        const btnDanger=document.querySelector('.btn--danger');
+        const btnClose=document.querySelector('.toast__close');
+
+        function toast({title='',message='',type='info',duration=3000}){
+            const delay=(duration/1000).toFixed(2);
+            const element=document.createElement('div');
+            // set timeout remove auto
+            const idRemove= setTimeout(function(){
+                    if(element)
+                    {
+                        idToast.removeChild(element)
+                    }
+                },duration+1000)
+                
+            element.onclick=function(e){
+                if(e.target.closest('.toast__close'))
+                {
+                    idToast.removeChild(element);
+                    clearTimeout(idRemove);
+                }
+            }
+            element.classList.add('toast',`toast--${type}`);
+            element.style.animation=`slideInLeft ease 0.3s,fadeOut linear 1s ${delay}s forwards`;
+            element.innerHTML=`
+            <div class="toast__icon">
+                <i class="fa-solid fa-circle-${icon[type]}"></i>
+            </div>
+            <div class="toast__body">
+                <h3 class="toast__title">${title}</h3>
+                <p class="toast__msg">${message}</p>
+            </div>
+            <div class="toast__close">
+                <i class="fa-solid fa-xmark"></i>
+            </div>
+        `;
+        idToast.append(element);
+        
+        }
+        
+
+        btnSuccess.onclick=function(){
+            const objectSuccess={
+                title:'Success',
+                message:'Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, cumque!',
+                type:'success',
+                duration:1000
+            };
+            toast(objectSuccess);
+
+        }
+        btnDanger.onclick=function(){
+            const objectDanger={
+                title:'Error',
+                message:'Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, cumque!',
+                type:'error',
+                duration:3000
+            };
+            toast(objectDanger);
+
+        }
+
+        
+
+    </script>
+</body>
+</html>
